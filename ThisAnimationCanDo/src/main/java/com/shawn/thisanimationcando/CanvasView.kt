@@ -54,7 +54,7 @@ class CanvasView : View {
         paint.apply {
             strokeWidth = 4f
             color = Color.BLACK
-            style = Paint.Style.STROKE
+            style = Paint.Style.FILL_AND_STROKE
             // 设置虚线效果
             pathEffect = null
         }
@@ -115,6 +115,78 @@ class CanvasView : View {
             (winSize.y - 60).toFloat(),
             paint
         )
+        // X正轴文字
+        for (i in 1 until (winSize.x - originOfCoordinateSystem.x) / 50) {
+            paint.strokeWidth = 2f
+            canvas.drawText(
+                "${100 * i}",
+                (originOfCoordinateSystem.x - 20 + 100 * i).toFloat(),
+                (originOfCoordinateSystem.y + 40).toFloat(),
+                paint
+            )
+            paint.strokeWidth = 5f
+            canvas.drawLine(
+                (originOfCoordinateSystem.x + 100 * i).toFloat(),
+                originOfCoordinateSystem.y.toFloat(),
+                (originOfCoordinateSystem.x + 100 * i).toFloat(),
+                (originOfCoordinateSystem.y - 10).toFloat(),
+                paint
+            )
+        }
+        // x负轴文字
+        for (i in 1 until originOfCoordinateSystem.x / 50) {
+            paint.strokeWidth = 2f
+            canvas.drawText(
+                "${-100 * i}",
+                (originOfCoordinateSystem.x - 20 - 100 * i).toFloat(),
+                (originOfCoordinateSystem.y + 40).toFloat(),
+                paint
+            )
+            paint.strokeWidth = 5f
+            canvas.drawLine(
+                (originOfCoordinateSystem.x - 100 * i).toFloat(),
+                originOfCoordinateSystem.y.toFloat(),
+                (originOfCoordinateSystem.x - 100 * i).toFloat(),
+                (originOfCoordinateSystem.y - 10).toFloat(),
+                paint
+            )
+        }
+        // y正轴文字
+        for (i in 1 until (winSize.y - originOfCoordinateSystem.y) / 50) {
+            paint.strokeWidth = 2f
+            canvas.drawText(
+                "${100 * i}",
+                (originOfCoordinateSystem.x + 20).toFloat(),
+                (originOfCoordinateSystem.y + 10 + 100 * i).toFloat(),
+                paint
+            )
+            paint.strokeWidth = 5f
+            canvas.drawLine(
+                originOfCoordinateSystem.x.toFloat(),
+                (originOfCoordinateSystem.y + 100 * i).toFloat(),
+                (originOfCoordinateSystem.x + 10).toFloat(),
+                (originOfCoordinateSystem.y + 100 * i).toFloat(),
+                paint
+            )
+        }
+        // y负轴文字
+        for (i in 1 until originOfCoordinateSystem.y / 50){
+            paint.strokeWidth = 2f
+            canvas.drawText(
+                "${-100 * i}",
+                (originOfCoordinateSystem.x + 20).toFloat(),
+                (originOfCoordinateSystem.y + 10 - 100 * i).toFloat(),
+                paint
+            )
+            paint.strokeWidth = 5f
+            canvas.drawLine(
+                originOfCoordinateSystem.x.toFloat(),
+                (originOfCoordinateSystem.y - 100 * i).toFloat(),
+                (originOfCoordinateSystem.x + 10).toFloat(),
+                (originOfCoordinateSystem.y - 100 * i).toFloat(),
+                paint
+            )
+        }
     }
 
     private fun originOfCoordinateSystemPath(

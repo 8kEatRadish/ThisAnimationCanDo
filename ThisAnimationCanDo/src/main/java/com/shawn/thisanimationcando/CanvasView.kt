@@ -11,19 +11,21 @@ class CanvasView : View {
     // 网格画笔
     private var paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    // 画图笔
+    private var redPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
     // 屏幕尺寸
     private var winSize: Point = Point(1000, 1000)
 
     // 坐标系原点
-    private var originOfCoordinateSystem: Point = Point(500, 500)
+    private var originOfCoordinateSystem: Point = Point(0, 0)
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     init {
         loadWinSize(context, winSize)
-        originOfCoordinateSystem.x = winSize.x / 2 - ((winSize.x / 2) % 50)
-        originOfCoordinateSystem.y = winSize.y / 2 - ((winSize.y / 2) % 50)
+        redPaint.color = Color.parseColor("#ff0000")
     }
 
     private fun loadWinSize(context: Context, winSize: Point) {
@@ -38,10 +40,47 @@ class CanvasView : View {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        canvas?.drawColor(Color.parseColor("#E0f6f5"))
         // TODO 绘制网格
         drawGrid(canvas, winSize, paint)
         // TODO 绘制坐标系
         drawOriginOfCoordinateSystem(canvas, originOfCoordinateSystem, winSize, paint)
+
+        // 画圆弧
+//        drawLikeCircle(canvas)
+        // 画图片
+        drawBitmap(canvas)
+    }
+
+    private fun drawBitmap(canvas: Canvas?) {
+        val bitmap = BitmapFactory.decodeResource(resources,R.mipmap.xiaohei_img1)
+//        val matrix = Matrix()
+//        matrix.setValues(floatArrayOf(
+//            1f,0.5f,100 * 3f,
+//            0f,1f,100 * 3f,
+//            0f,0f,3f
+//        ))
+//        canvas?.drawBitmap(bitmap,matrix,redPaint)
+        val rectF = RectF(100 + 900f, 100f, 600 + 900f,400f)
+        canvas?.drawBitmap(bitmap,null,rectF,redPaint)
+    }
+
+    private fun drawLikeCircle(canvas: Canvas?) {
+        canvas?.apply {
+            // 圆
+            drawCircle(750f, 300f, 200f, redPaint)
+            // 椭圆
+            val rectF = RectF(100f, 100f, 500f, 300f)
+            drawOval(rectF, redPaint)
+
+            // 绘制圆弧(矩形边界,开始角度,扫过角度,使用中心?边缘两点与中心连线区域：边缘两点连线区域)
+            val rectArc = RectF(100f + 950, 100f, 500f + 950, 300f)
+            drawArc(rectArc, 0f, 90f, true, redPaint)
+
+            // 绘制圆弧(矩形边界,开始角度,扫过角度,使用中心?边缘两点与中心连线区域：边缘两点连线区域)
+            val rectArc2 = RectF(100f + 950 + 300, 100f, 500f + 950 + 300, 300f)
+            drawArc(rectArc2, 0f, 90f, false, redPaint)
+        }
     }
 
     private fun drawOriginOfCoordinateSystem(
@@ -118,6 +157,7 @@ class CanvasView : View {
         // X正轴文字
         for (i in 1 until (winSize.x - originOfCoordinateSystem.x) / 50) {
             paint.strokeWidth = 2f
+            paint.textSize = 20f
             canvas.drawText(
                 "${100 * i}",
                 (originOfCoordinateSystem.x - 20 + 100 * i).toFloat(),
@@ -170,7 +210,7 @@ class CanvasView : View {
             )
         }
         // y负轴文字
-        for (i in 1 until originOfCoordinateSystem.y / 50){
+        for (i in 1 until originOfCoordinateSystem.y / 50) {
             paint.strokeWidth = 2f
             canvas.drawText(
                 "${-100 * i}",
